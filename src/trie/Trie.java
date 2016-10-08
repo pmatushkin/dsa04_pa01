@@ -27,6 +27,27 @@ public class Trie {
         List<Map<Character, Integer>> trie = new ArrayList<Map<Character, Integer>>();
 
         // write your code here
+        trie.add(new HashMap<Character, Integer>());
+
+        for (String pattern : patterns) {
+            // currentNode <- root
+            int currentNodeIndex = 0;
+
+            for (int i = 0; i < pattern.length(); i++) {
+                char currentSymbol = pattern.charAt(i);
+                Map<Character, Integer> currentNode = trie.get(currentNodeIndex);
+
+                if (currentNode.containsKey(currentSymbol)) {
+                    currentNodeIndex = currentNode.get(currentSymbol);
+                } else {
+                    Map<Character, Integer> newNode = new HashMap<Character, Integer>();
+                    trie.add(newNode);
+                    int newNodeIndex = trie.size() - 1;
+                    currentNode.put(currentSymbol, newNodeIndex);
+                    currentNodeIndex = newNodeIndex;
+                }
+            }
+        }
 
         return trie;
     }

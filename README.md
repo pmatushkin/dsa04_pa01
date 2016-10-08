@@ -2,7 +2,7 @@
 ## Algorithms on Strings Programming Assignment 01: Suffix Trees
 ### Problems
 Practice implementing a fundamental data structure — suffix tree:
-* [`/src/trie/Trie.java`](src/trie/Trie.java): Problem 1, Construct a Trie from a Collection of Patterns, constructs a trie from a collection of patterns;
+* [`/src/trie/Trie.java`](src/trie/Trie.java): Problem 1, Construct a Trie from a Collection of Patterns, constructs a trie from a collection of patterns (PASSED);
 * [`/src/trie_matching/TrieMatching.java`](src/trie_matching/TrieMatching.java): Problem 2, Implement TrieMatching, implements TrieMatching algorithm;
 * [`/src/trie_matching_extended/TrieMatchingExtended.java`](src/trie_matching_extended/TrieMatchingExtended.java): Problem 3, Extend TrieMatching, extends TrieMatching algorithm so that it handles correctly cases when one of the patterns is a prefix of another one;
 * [`/src/suffix_tree/SuffixTree.java`](src/suffix_tree/SuffixTree.java): Problem 4, Construct the Suffix Tree of a String, constructs the suffix tree of a string;
