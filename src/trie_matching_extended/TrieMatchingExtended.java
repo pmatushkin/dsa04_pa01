@@ -54,46 +54,52 @@ public class TrieMatchingExtended implements Runnable {
         List<NodeExtended> trie = buildTrieExtended(patterns);
 
         int k = 0;
-        int textLength = text.length();
         NodeExtended root = trie.get(0);
 
-        while (k < textLength) {
-            NodeExtended v = root;
-            int l = k;
-            boolean isSubPatternFound = false;
+        while (!text.isEmpty()) {
+            int match = -1;
+            char currentSymbol = text.charAt(0);
+            NodeExtended currentNode = root;
+            int l = 0;
 
             while (true) {
-                // the current node is a leaf node;
-                // the found pattern is not empty;
+                // the current node is where one of the patterns ends;
                 // it means positive match
-                if (isNodeLeaf(v) || isSubPatternFound) {
-                    result.add(k);
+                if (currentNode.patternEnd) {
+                    match = k;
+
                     break;
-                }
+                } else if (currentNode.next[letterToIndex(currentSymbol)] != NodeExtended.NA) {
+                    // we can advance one node down
+                    // and check if we reached the end of the Text string
+                    currentNode = trie.get(currentNode.next[letterToIndex(currentSymbol)]);
 
-                // the Text string ended, but we are not at a leaf node;
-                // it means negative match
-                if (l >= textLength) {
-                    break;
-                }
+                    // we didn't: getting the next symbol
+                    if (l + 1 < text.length()) {
+                        currentSymbol = text.charAt(++l);
+                    } else {
+                        // we did: check if the current node is where one of the patterns ends;
+                        // it means positive match
+                        if (currentNode.patternEnd) {
+                            match = k;
+                        }
 
-                char symbol = text.charAt(l);
-                int symbolIndex = letterToIndex(symbol);
-
-                if (v.next[symbolIndex] != NodeExtended.NA) {
-                    // advancing to the next symbol in Text,
-                    // and to the next node in trie
-                    isSubPatternFound = v.patternEnd;
-                    l++;
-                    v = trie.get(v.next[symbolIndex]);
+                        // otherwise we failed to match any pattern;
+                        // it means negative match
+                        break;
+                    }
                 } else {
-                    // cannot find follow-up nodes matching the current symbol;
-                    // it means negative match
                     break;
                 }
             }
 
+            if (match != -1) {
+                result.add(match);
+            }
+
+            // advance one position to the end of the Text string
             k++;
+            text = text.substring(1);
         }
 
         return result;
@@ -123,21 +129,15 @@ public class TrieMatchingExtended implements Runnable {
                     currentNodeIndex = currentNode.next[currentSymbolIndex];
                 }
 
-                if ((i == patternLength - 1) && (!isNodeLeaf(currentNode))) {
-                    currentNode.patternEnd = true;
+                if (i == patternLength - 1) {
+                    NodeExtended patternEndNode = trie.get(currentNodeIndex);
+                    patternEndNode.patternEnd = true;
                 }
             }
         }
 
-        print(trie);
+//        print(trie);
         return trie;
-    }
-
-    boolean isNodeLeaf(NodeExtended node) {
-        return node.next[0] == NodeExtended.NA
-                && node.next[1] == NodeExtended.NA
-                && node.next[2] == NodeExtended.NA
-                && node.next[3] == NodeExtended.NA;
     }
 
     public void print(List<NodeExtended> trie) {
